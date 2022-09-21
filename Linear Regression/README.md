@@ -25,4 +25,8 @@ Outliers are points where the response is unusual given the predictor. In contra
 3. Non-constant variance of error terms (Residuals vs fitted values plot, funnel shape)
 4. Outliers (Residuals vs fitted values, abs(studentized residuals) > 3 are outliers)
 5. High leverage points 
-6. Collinearity
+
+![Screenshot 2022-09-21 at 3 32 59 PM](https://user-images.githubusercontent.com/68551564/191442881-9fd38fa7-0c4d-4b17-91ac-bde8e17f339c.png)
+
+6. Collinearity (Causes S.E to be higher than expected, T-score to be lower than expected, may fail to reject H0 in certain cases, look towards correlation matrix)
+7. multicollinearity (VIF

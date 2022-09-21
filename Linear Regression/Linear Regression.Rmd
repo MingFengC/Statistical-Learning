@@ -145,12 +145,205 @@ plot(lm.fit)
 
 We observe that there are no obvious outliers or points with high leverage.
 
+# Q11a
 
+```{r}
+set.seed(1)
+x <- rnorm(100)
+y <- 2 * x + rnorm(100)
 
+lm.fit <- lm(y ~ x + 0)
+summary(lm.fit)
+```
 
+y has significant relationship with x.
 
+## Q11b
 
+```{r}
+lm.fit <- lm(x ~ y + 0)
+summary(lm.fit)
+```
 
+x has significant relationship with y.
+
+## Q13a
+
+```{r}
+set.seed(1)
+x <- rnorm(100)
+```
+
+## Q13b
+
+```{r}
+eps <- rnorm(100, sd = 0.5)
+```
+
+## Q13c
+
+```{r}
+y <- -1 + 0.5 * x + eps
+length(y)
+```
+
+beta0 = -1, beta1 = 0.5
+
+## Q13d
+
+```{r}
+plot(x, y)
+```
+
+We can observe a positive linear relationship between y and x. As x increases, y increases.
+
+## Q13e
+
+```{r}
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+confint(lm.fit)
+```
+
+beta0 = -1.01885 = -1 approximately
+beta1 = 0.49947 = 0.5 approximately
+
+We see that the given coefficients were sufficiently close to the fitted least square coefficients.
+
+## Q13f
+
+```{r}
+plot(x, y)
+abline(lm.fit, col = "blue")
+abline(a = -1, b = 0.5, col = "red")
+legend("bottomright", legend = c("Fitted regression line", "Population regression line"), pch = "/", col = c("blue", "red"))
+```
+
+## Q13g
+
+```{r}
+lm.fit <- lm(y ~ x + I(x^2))
+summary(lm.fit)
+plot(lm.fit)
+```
+
+The first R2 was 0.4674 and the new R2 is 0.4779. There is a slight increase in R2. Addition of the term improves the fit slightly.
+
+## Q13h
+
+```{r}
+eps <- rnorm(100, sd = 0.1)
+y <- -1 + 0.5 * x + eps
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+plot(x, y)
+abline(lm.fit, col = "blue")
+abline(a = -1, b = 0.5, col = "red")
+legend("bottomright", legend = c("Fitted regression line", "Population regression line"), pch = "/", col = c("blue", "red"))
+lm.fit <- lm(y ~ x + I(x^2))
+summary(lm.fit)
+plot(lm.fit)
+confint(lm.fit)
+```
+
+## Q13i
+
+```{r}
+eps <- rnorm(100, sd = 0.5)
+y <- -1 + 0.5 * x + eps
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+plot(x, y)
+abline(lm.fit, col = "blue")
+abline(a = -1, b = 0.5, col = "red")
+legend("bottomright", legend = c("Fitted regression line", "Population regression line"), pch = "/", col = c("blue", "red"))
+lm.fit <- lm(y ~ x + I(x^2))
+summary(lm.fit)
+plot(lm.fit)
+confint(lm.fit)
+```
+
+## Q14a
+
+```{r}
+set.seed(1)
+x1 <- runif(100)
+x2 <- 0.5 * x1 + rnorm(100) / 10
+y <- 2 + 2 * x1 + 0.3 * x2 + rnorm(100)
+```
+
+beta0 = 2, beta1 = 2, beta2 = 0.3
+
+## Q14b
+
+```{r}
+cor(x1, x2)
+plot(x1, x2)
+```
+
+## Q14c
+
+```{r}
+lm.fit <- lm(y ~ x1 + x2)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+beta0 = 2.1305, beta1 = 1.4396, beta2 = 1.0097
+
+The coefficient for the intercept is approximately the same at 2 but the difference of beta1 and beta2 are large. 
+We can reject the null hypothesis for beta1 as the p-value is small. 
+
+## Q14d
+
+```{r}
+lm.fit <- lm(y ~ x1)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+Yes we can reject the null hypothesis.
+
+## Q14e
+
+```{r}
+lm.fit <- lm(y ~ x2)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+We can reject the null hypothesis.
+
+## Q14f
+
+No the results are not contradictory. This is because both predictors are correlated, so when x2 was added to the model that already contains x1, it essentially is not contributing new information, which means x2 is redundant when using both predictors.
+
+## Q14g
+
+```{r}
+x1 <- c(x1, 0.1)
+x2 <- c(x2, 0.8)
+y <- c(y, 6)
+lm.fit <- lm(y ~ x1 + x2)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+```{r}
+lm.fit <- lm(y ~ x1)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+```{r}
+lm.fit <- lm(y ~ x2)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+In the models containing x2, the point has high leverage. This point is not an outlier in all the models.
+
+## Q15a
 
 
 

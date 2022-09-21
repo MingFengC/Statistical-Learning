@@ -18,6 +18,7 @@ PCA (Principal component analysis)
 3. With the predictors, find first and second principal components (eigenvectors v1 & v2)
 
 Dianostics
+
 Outliers are points where the response is unusual given the predictor. In contrast, points with high leverage have an unusual predictor value. High leverage observations tend to have more substantial impact on the estimated regression line. In a model with multiple predictors, points with high leverage fall outside the range of other values.
 1. Non-linearity of response-predictor relationship (Residual vs fitted values plot)
 2. Correlation of error terms

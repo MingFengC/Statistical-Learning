@@ -12,7 +12,7 @@ Penalization & Variable Selection
 2. All methods above excluding lasso are able to perform variable selection
 3. C.V can be performed for ridge & lasso regression to obtain optimum lambda constraint value that gives the lowest MSE
 
-PCA (Principal component analysis)
+Dimension Reduction: PCA (Principal component analysis)
 1. Maximise the variance of (xi - xbar, phi)
 2. Sequential PCA Algorithm (find leading eigenvector) & eigen decomposition
 3. With the predictors, find first and second principal components (eigenvectors v1 & v2)

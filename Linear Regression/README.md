@@ -34,3 +34,11 @@ Outliers are points where the response is unusual given the predictor. In contra
 ![VIF](https://user-images.githubusercontent.com/68551564/191443707-01cad8ef-1a35-4cc0-a939-77e932fd9b06.png)
 
 R2 from a regression of Xj onto all of the other predictors. If R2 is close to one, then collinearity is present, and so the VIF will be large.
+
+Steps:
+1. Determine the scale of predictor variables to be included in the regression function: pairwise scatter plots.
+2. Using the full model for the preliminary analysis.
+3. Check homogeneity (equal variance of irreducible error): plot of residuals vs. fitted values (check for null pattern).
+4. Check normality: normal probability plot of standardized residuals (points are supposed to fall on a straight line in a Q-Q plot).
+5. Check outliers: hat values, deletion residuals and Cook’s distance.
+6. If there are any discrepancy, adopt remedial measures (for outliers: create dummy variables of size n of 0s except the index of the observation number and add this dummy variable to the model reject if p-value < 0.05).

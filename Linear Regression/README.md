@@ -29,7 +29,7 @@ Outliers are points where the response is unusual given the predictor. In contra
 ![leverage statistic](https://user-images.githubusercontent.com/68551564/191442881-9fd38fa7-0c4d-4b17-91ac-bde8e17f339c.png)
 
 6. Collinearity (Causes S.E to be higher than expected, T-score to be lower than expected, may fail to reject H0 in certain cases, look towards correlation matrix)
-7. multicollinearity (VIF of 1 represents no collinearity and values above 5/10 indicates a problematic amount of collinearity)
+7. Multicollinearity (VIF of 1 represents no collinearity and values above 5/10 indicates a problematic amount of collinearity)
 
 ![VIF](https://user-images.githubusercontent.com/68551564/191443707-01cad8ef-1a35-4cc0-a939-77e932fd9b06.png)
 

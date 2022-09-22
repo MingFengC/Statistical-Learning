@@ -43,3 +43,7 @@ Steps:
 5. Check outliers: hat values, deletion residuals and Cook’s distance.
 6. If there are any discrepancy, adopt remedial measures (for outliers: create dummy variables of size n of 0s except the index of the observation number and add this dummy variable to the model reject if p-value < 0.05).
 7. If preliminary analysis showed discrepancies (e.g. outliers), remove those observations if significant and perform variable selection/penalization using the new dataset. Then perform diagnostics check and remove significant discrepancies from the original dataset. The new dataset will be the final dataset to train the model.
+
+Model Selection & Regularization
+1. Criteria: Cp, AIC/BIC, adjR2
+2. Minimum value gives the best model subset of the full fit

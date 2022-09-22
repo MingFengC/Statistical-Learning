@@ -1,0 +1,184 @@
+---
+title: "Linear Model Selection"
+author: "Chua Ming Feng"
+date: "2022-09-22"
+output: pdf_document
+---
+
+```{r}
+library(leaps)
+library(glmnet)
+set.seed(4211)
+```
+
+# Applied Questions ISLR Linear Model Selection & Regularization
+
+## Q8a
+
+```{r}
+X <- rnorm(100)
+eps <- rnorm(100)
+```
+
+## Q8b
+
+```{r}
+Y <- 1 + X + X^2 + X^3 + eps
+```
+
+## Q8c
+
+```{r}
+design <- sapply(1:10, function(k) X^k)
+design <- cbind(design, Y)
+colnames(design) = c(paste("X", 1:10, sep = ""), "Y")
+dat = as.data.frame(design)
+fit.full <- regsubsets(Y ~ ., data = dat, nvmax = 10)
+fit.summ <- summary(fit.full)
+fit.summ
+```
+
+```{r}
+plot(1:10, fit.summ$cp, type = "b", xlab = "k", ylab = "Cp")
+id <- which.min(fit.summ$cp)
+coef(fit.full, id)
+```
+
+```{r}
+plot(1:10, fit.summ$bic, type = "b", xlab = "k", ylab = "BIC")
+id <- which.min(fit.summ$bic)
+coef(fit.full, id)
+```
+
+```{r}
+plot(1:10, fit.summ$adjr2, type = "b", xlab = "k", ylab = "Adj R2")
+id <- which.max(fit.summ$adjr2)
+coef(fit.full, id)
+```
+
+## Q8d
+
+```{r}
+fit.full <- regsubsets(Y ~ ., data = dat, nvmax = 10, method = "forward")
+fit.summ <- summary(fit.full)
+fit.summ
+```
+
+```{r}
+plot(1:10, fit.summ$cp, type = "b", xlab = "k", ylab = "Cp")
+id <- which.min(fit.summ$cp)
+coef(fit.full, id)
+```
+
+```{r}
+plot(1:10, fit.summ$bic, type = "b", xlab = "k", ylab = "BIC")
+id <- which.min(fit.summ$bic)
+coef(fit.full, id)
+```
+
+```{r}
+plot(1:10, fit.summ$adjr2, type = "b", xlab = "k", ylab = "Adj R2")
+id <- which.max(fit.summ$adjr2)
+coef(fit.full, id)
+```
+
+```{r}
+fit.full <- regsubsets(Y ~ ., data = dat, nvmax = 10, method = "backward")
+fit.summ <- summary(fit.full)
+fit.summ
+```
+
+```{r}
+plot(1:10, fit.summ$cp, type = "b", xlab = "k", ylab = "Cp")
+id <- which.min(fit.summ$cp)
+coef(fit.full, id)
+```
+
+```{r}
+plot(1:10, fit.summ$bic, type = "b", xlab = "k", ylab = "BIC")
+id <- which.min(fit.summ$bic)
+coef(fit.full, id)
+```
+
+```{r}
+plot(1:10, fit.summ$adjr2, type = "b", xlab = "k", ylab = "Adj R2")
+id <- which.max(fit.summ$adjr2)
+coef(fit.full, id)
+```
+
+## Q8e
+
+```{r}
+set.seed(4211)
+grid <- 10^seq(10, -2, length = 100)
+cv.out <- cv.glmnet(x = design[, -ncol(design)], y = Y, alpha = 1)
+plot(cv.out)
+
+bestlambda <- cv.out$lambda.min
+bestlambda
+```
+
+```{r}
+lasso.fit <- glmnet(x = design[, -ncol(design)], y = Y, alpha = 1, lambda = grid)
+lasso.coef <- predict(lasso.fit, s = bestlambda, type = "coefficients")
+lasso.coef
+```
+
+## Q8f
+
+```{r}
+Y <- 1 + X^7 + eps
+```
+
+```{r}
+design <- cbind(design[, -ncol(design)], Y)
+dat <- as.data.frame(design)
+fit.full <- regsubsets(Y ~ ., data = dat, nvmax = 10)
+fit.summ <- summary(fit.full)
+fit.summ
+```
+
+```{r}
+plot(1:10, fit.summ$cp, type = "b", xlab = "k", ylab = "Cp")
+cp.id <- which.min(fit.summ$cp)
+coef(fit.full, cp.id)
+```
+
+```{r}
+plot(1:10, fit.summ$bic, type = "b", xlab = "k", ylab = "BIC")
+bic.id <- which.min(fit.summ$bic)
+coef(fit.full, bic.id)
+```
+
+```{r}
+set.seed(4211)
+grid <- 10^seq(10, -2, length = 100)
+cv.out <- cv.glmnet(x = design[, -ncol(design)], y = Y, alpha = 1)
+plot(cv.out)
+```
+
+```{r}
+bestlambda <- cv.out$lambda.min
+bestlambda
+```
+
+```{r}
+lasso.fit <- glmnet(x = design[, -ncol(design)], y = Y, lambda = grid, alpha = 1)
+lasso.coef <- predict(lasso.fit, s = bestlambda, type = "coefficients")
+lasso.coef
+```
+
+We observe that from both best subset selection and lasso, X7 is selected. However, irrelevant predictors X10 and X5 are selected in best subset selection and lasso respectively.
+
+
+
+
+
+
+
+
+
+
+
+
+

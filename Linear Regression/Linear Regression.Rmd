@@ -9,7 +9,7 @@ output: pdf_document
 knitr::opts_chunk$set(echo = TRUE)
 ```
 
-# Applied Questions ISLR
+# Applied Questions ISLR Linear Regression
 
 ## Q8a
 

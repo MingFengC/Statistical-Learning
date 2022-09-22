@@ -107,6 +107,193 @@ plot(lm.fit)
 
 # We observe that there are no obvious outliers or points with high leverage.
 
+# Q11a
+
+set.seed(1)
+x <- rnorm(100)
+y <- 2 * x + rnorm(100)
+
+lm.fit <- lm(y ~ x + 0)
+summary(lm.fit)
+
+# y has significant relationship with x.
+
+## Q11b
+
+lm.fit <- lm(x ~ y + 0)
+summary(lm.fit)
+
+# x has significant relationship with y.
+
+## Q13a
+
+set.seed(1)
+x <- rnorm(100)
+
+## Q13b
+
+eps <- rnorm(100, sd = 0.5)
+
+## Q13c
+
+y <- -1 + 0.5 * x + eps
+length(y)
+
+# beta0 = -1, beta1 = 0.5
+
+## Q13d
+
+plot(x, y)
+
+# We can observe a positive linear relationship between y and x. As x increases, y increases.
+
+## Q13e
+
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+confint(lm.fit)
+
+# beta0 = -1.01885 = -1 approximately
+# beta1 = 0.49947 = 0.5 approximately
+
+# We see that the given coefficients were sufficiently close to the fitted least square coefficients.
+
+## Q13f
+
+plot(x, y)
+abline(lm.fit, col = "blue")
+abline(a = -1, b = 0.5, col = "red")
+legend("bottomright", legend = c("Fitted regression line", "Population regression line"), pch = "/", col = c("blue", "red"))
+
+## Q13g
+
+lm.fit <- lm(y ~ x + I(x^2))
+summary(lm.fit)
+plot(lm.fit)
+
+# The first R2 was 0.4674 and the new R2 is 0.4779. There is a slight increase in R2. Addition of the term improves the fit slightly.
+
+## Q13h
+
+eps <- rnorm(100, sd = 0.1)
+y <- -1 + 0.5 * x + eps
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+plot(x, y)
+abline(lm.fit, col = "blue")
+abline(a = -1, b = 0.5, col = "red")
+legend("bottomright", legend = c("Fitted regression line", "Population regression line"), pch = "/", col = c("blue", "red"))
+lm.fit <- lm(y ~ x + I(x^2))
+summary(lm.fit)
+plot(lm.fit)
+confint(lm.fit)
+
+## Q13i
+
+eps <- rnorm(100, sd = 0.5)
+y <- -1 + 0.5 * x + eps
+lm.fit <- lm(y ~ x)
+summary(lm.fit)
+plot(x, y)
+abline(lm.fit, col = "blue")
+abline(a = -1, b = 0.5, col = "red")
+legend("bottomright", legend = c("Fitted regression line", "Population regression line"), pch = "/", col = c("blue", "red"))
+lm.fit <- lm(y ~ x + I(x^2))
+summary(lm.fit)
+plot(lm.fit)
+confint(lm.fit)
+
+## Q14a
+
+set.seed(1)
+x1 <- runif(100)
+x2 <- 0.5 * x1 + rnorm(100) / 10
+y <- 2 + 2 * x1 + 0.3 * x2 + rnorm(100)
+
+# beta0 = 2, beta1 = 2, beta2 = 0.3
+
+## Q14b
+
+cor(x1, x2)
+plot(x1, x2)
+
+## Q14c
+
+lm.fit <- lm(y ~ x1 + x2)
+summary(lm.fit)
+plot(lm.fit)
+
+# beta0 = 2.1305, beta1 = 1.4396, beta2 = 1.0097
+
+# The coefficient for the intercept is approximately the same at 2 but the difference of beta1 and beta2 are large. 
+# We can reject the null hypothesis for beta1 as the p-value is small. 
+
+## Q14d
+
+lm.fit <- lm(y ~ x1)
+summary(lm.fit)
+plot(lm.fit)
+
+# Yes we can reject the null hypothesis.
+
+## Q14e
+
+lm.fit <- lm(y ~ x2)
+summary(lm.fit)
+plot(lm.fit)
+
+# We can reject the null hypothesis.
+
+## Q14f
+
+# No the results are not contradictory. This is because both predictors are correlated, so when x2 was added to the model that already contains x1, it essentially is not contributing new information, which means x2 is redundant when using both predictors.
+
+## Q14g
+
+x1 <- c(x1, 0.1)
+x2 <- c(x2, 0.8)
+y <- c(y, 6)
+lm.fit <- lm(y ~ x1 + x2)
+summary(lm.fit)
+plot(lm.fit)
+
+lm.fit <- lm(y ~ x1)
+summary(lm.fit)
+plot(lm.fit)
+
+lm.fit <- lm(y ~ x2)
+summary(lm.fit)
+plot(lm.fit)
+
+# In the models containing x2, the point has high leverage. This point is not an outlier in all the models.
+
+## Q15a
+
+for (i in 2:length(Boston)) {
+  x <- Boston[, i]
+  print(colnames(Boston)[i])
+  lm.fit <- lm(Boston$crim ~ x, data = Boston)
+  print(summary(lm.fit))
+}
+
+# All predictors are significant except for chas which has a p-value of 0.209.
+
+## Q15b
+
+lm.fit <- lm(crim ~ ., data = Boston)
+summary(lm.fit)
+plot(lm.fit)
+
+# For the predictors zn, dis, rad and medv we can reject the null hypothesis as their p-values are small.
+
+## Q15d
+
+for (i in 2:length(Boston)) {
+  x <- Boston[, i]
+  print(colnames(Boston)[i])
+  lm.fit <- lm(Boston$crim ~ x + I(x^2) + I(x^3), data = Boston)
+  print(summary(lm.fit))
+}
 
 
 

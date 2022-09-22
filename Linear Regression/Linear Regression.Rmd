@@ -345,14 +345,37 @@ In the models containing x2, the point has high leverage. This point is not an o
 
 ## Q15a
 
+```{r}
+for (i in 2:length(Boston)) {
+  x <- Boston[, i]
+  print(colnames(Boston)[i])
+  lm.fit <- lm(Boston$crim ~ x, data = Boston)
+  print(summary(lm.fit))
+}
+```
 
+All predictors are significant except for chas which has a p-value of 0.209.
 
+## Q15b
 
+```{r}
+lm.fit <- lm(crim ~ ., data = Boston)
+summary(lm.fit)
+plot(lm.fit)
+```
 
+For the predictors zn, dis, rad and medv we can reject the null hypothesis as their p-values are small.
 
+## Q15d
 
-
-
+```{r}
+for (i in 2:length(Boston)) {
+  x <- Boston[, i]
+  print(colnames(Boston)[i])
+  lm.fit <- lm(Boston$crim ~ x + I(x^2) + I(x^3), data = Boston)
+  print(summary(lm.fit))
+}
+```
 
 
 

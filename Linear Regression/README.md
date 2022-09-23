@@ -51,3 +51,7 @@ Model Selection & Regularization
 Test MSE
 1. Approximate through C.V if the dataset is small
 2. Split dataset into training and test, and approximate through predict function
+
+Model.matrix 
+1. To be used when the fit involves matrices and not dataframes
+2. Dummy variables needed when calculating vcov matrix

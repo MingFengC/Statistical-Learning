@@ -9,6 +9,7 @@ output: pdf_document
 library(ISLR2)
 library(leaps)
 library(glmnet)
+library(pls)
 set.seed(4211)
 ```
 
@@ -239,6 +240,25 @@ lasso.coef <- predict(lasso.fit, s = bestlambda, newx = model.matrix(Apps~., tes
 lasso.coef
 ```
 
+## Q9e
+
+```{r}
+pc <- prcomp(train.matrix[, -1])
+pc
+```
+
+```{r}
+set.seed(4211)
+pcr.fit <- pcr(Apps ~ ., data = train, scale = TRUE, validation = "CV")
+summary(pcr.fit)
+
+pcr.pred <- predict(pcr.fit, test, type = "response")
+test.mse <- mean((test$Apps - pcr.pred)^2)
+test.mse
+
+coef(pcr.fit)
+```
+
 ## Q10a
 
 ```{r}
@@ -302,16 +322,72 @@ which.min(train.mse)
 
 The model with the smallest training mse has 20 predictors while the model with the smallest test mse has 10 predictors.
 
+## Q11a
 
+```{r}
+sample.size <- floor(0.7 * nrow(Boston))
+train.id <- sample(seq_len(nrow(Boston)), size = sample.size)
+train <- Boston[train.id, ]
+test <- Boston[-train.id, ]
+```
 
+```{r}
+# Best Subset
+fit.regsubset <- regsubsets(crim ~ ., data = train, nvmax = 12, method = "exhaustive")
+fit.regsubset.summ <- summary(fit.regsubset)
+best.bic.id <- which.min(fit.regsubset.summ$bic)
+coef(fit.regsubset, best.bic.id)
+fit.regsubset.pred <- predict.regsubsets(fit.regsubset, test, best.bic.id)
+test.mse <- mean((test$crim - fit.regsubset.pred)^2)
+test.mse
+```
 
+```{r}
+# lasso
+X <- model.matrix(crim ~ ., train)[, -1]
+Y <- train[, 1]
 
+X.test <- model.matrix(crim ~ ., test)[, -1]
+Y.test <- test[, 1]
 
+cv.out <- cv.glmnet(X, Y, alpha = 1)
+plot(cv.out)
+bestlambda <- cv.out$lambda.min
+lasso.fit <- glmnet(X, Y, alpha = 1)
+predict(lasso.fit, s = bestlambda, type = "coefficients")
+lasso.pred <- predict(lasso.fit, s = bestlambda, newx = X.test, type = "response")
+test.mse <- mean((Y.test - lasso.pred)^2)
+test.mse
+```
 
+```{r}
+# ridge
+cv.out <- cv.glmnet(X, Y, alpha = 0)
+plot(cv.out)
+bestlambda <- cv.out$lambda.min
+ridge.fit <- glmnet(X, Y, alpha = 0)
+predict(ridge.fit, s = bestlambda, type = "coefficients")
+ridge.pred <- predict(ridge.fit, s = bestlambda, newx = X.test, type = "response")
+test.mse <- mean((Y.test - ridge.pred)^2)
+test.mse
+```
 
+```{r}
+# PCR
+pcr.fit <- pcr(crim ~ ., data = train, scale = TRUE, validation = "CV")
+pcr.summ <- summary(pcr.fit)
+validationplot(pcr.fit, newdata = test, val.type = "MSEP")
+pcr.msep <- MSEP(pcr.fit, newdata = test)
+min(pcr.msep$val)
+```
 
+## Q11b
 
+When we compare the test MSE across best subset, lasso, ridge and pcr, we observe that ridge gave the smallest test mse.
 
+## Q11c
+
+Yes the chosen model involves all the features as ridge penalty is not capable of variable selection.
 
 
 

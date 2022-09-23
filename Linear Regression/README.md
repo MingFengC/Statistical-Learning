@@ -47,3 +47,7 @@ Steps:
 Model Selection & Regularization
 1. Criteria: Cp, AIC/BIC, adjR2
 2. Minimum value gives the best model subset of the full fit
+
+Test MSE
+1. Approximate through C.V if the dataset is small
+2. Split dataset into training and test, and approximate through predict function

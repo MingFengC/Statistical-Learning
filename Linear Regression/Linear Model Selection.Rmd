@@ -6,6 +6,7 @@ output: pdf_document
 ---
 
 ```{r}
+library(ISLR2)
 library(leaps)
 library(glmnet)
 set.seed(4211)
@@ -169,6 +170,145 @@ lasso.coef
 ```
 
 We observe that from both best subset selection and lasso, X7 is selected. However, irrelevant predictors X10 and X5 are selected in best subset selection and lasso respectively.
+
+## Q9a
+
+```{r}
+set.seed(4211)
+# train.size <- floor(0.70 * nrow(College))
+# train.index <- sample(seq_len(nrow(College)), size = train.size)
+
+# train <- College[train.index, ]
+# test <- College[-train.index, ]
+s = sample.int(2,nrow(College),replace=T) 
+train = College[s==1,]
+test = College[s==2,]
+```
+
+## Q9b
+
+```{r}
+lm.fit <- lm(Apps ~ ., data = train)
+summary(lm.fit)
+plot(lm.fit)
+```
+
+```{r}
+lm.pred <- predict(lm.fit, test)
+lm.mse <- mean((test$Apps - lm.pred)^2)
+lm.mse
+```
+
+## Q9c
+
+```{r}
+train.matrix <- model.matrix(Apps ~ ., train)
+cv.out <- cv.glmnet(train.matrix, train$Apps, alpha = 0)
+plot(cv.out)
+```
+
+```{r}
+bestlambda <- cv.out$lambda.min
+ridge.fit <- glmnet(train.matrix, train$Apps, alpha = 0)
+ridge.pred <- predict(ridge.fit, s = bestlambda, newx = model.matrix(Apps ~ ., test))
+mse <- mean((test$Apps- ridge.pred)^2)
+mse
+```
+
+## Q9d
+
+```{r}
+cv.out <- cv.glmnet(train.matrix, train$Apps, alpha = 1)
+plot(cv.out)
+```
+
+```{r}
+bestlambda <- cv.out$lambda.min
+bestlambda
+```
+
+```{r}
+lasso.fit <- glmnet(train.matrix, train$Apps, alpha = 1)
+lasso.pred <- predict(lasso.fit, s = bestlambda, newx = model.matrix(Apps ~ ., test))
+mse <- mean((test$Apps - lasso.pred)^2)
+mse
+```
+
+```{r}
+lasso.coef <- predict(lasso.fit, s = bestlambda, newx = model.matrix(Apps~., test), type = "coefficients")
+lasso.coef
+```
+
+## Q10a
+
+```{r}
+set.seed(4211)
+p = 20
+n = 1000
+zero.coef <- sample(seq_len(20), p / 2)
+beta <- rnorm(20, mean = 1, sd = 2)
+beta[zero.coef] = 0
+X <- matrix(data = rnorm(20000), nrow = 1000, ncol = 20)
+eps <- rnorm(20000)
+Y <- X %*% beta + 1000
+design <- cbind(X, Y)
+colnames(design) <- c(paste("X", 1:20, sep = ""), "Y")
+dat <- as.data.frame(design)
+```
+
+## Q10b
+
+```{r}
+train.id <- sample(seq_len(1000), size = 100)
+train <- dat[train.id, ]
+test <- dat[-train.id, ]
+fit.full <- regsubsets(Y ~ ., data = train, nvmax = 20, method= "exhaustive")
+fit.summ <- summary(fit.full)
+train.mse <- fit.summ$rss / nrow(train)
+plot(1:20, mse, type = "b", xlab = "k", ylab= "Training MSE")
+```
+
+## Q10c
+
+```{r}
+predict.regsubsets <- function(object, newx, id) {
+  formula <- as.formula(object$call[[2]])
+  matrix <- model.matrix(formula, newx)
+  coef <- coef(object, id)
+  xvars <- names(coef)
+  return(matrix[, xvars] %*% coef)
+}
+```
+
+```{r}
+test.mse = sapply(1:p,function(k) {
+  pred = predict.regsubsets(fit.full,test,id=k) 
+  return(mean((pred-test$Y)^2))
+})
+plot(1:20, test.mse, type = "l", xlab = "k", ylab = "Test MSE")
+```
+
+## Q10e
+
+```{r}
+which.min(test.mse)
+```
+
+## Q10f
+
+```{r}
+which.min(train.mse)
+```
+
+The model with the smallest training mse has 20 predictors while the model with the smallest test mse has 10 predictors.
+
+
+
+
+
+
+
+
 
 
 

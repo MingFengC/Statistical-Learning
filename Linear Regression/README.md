@@ -1,8 +1,15 @@
 # Linear Regression
 
-Goal: We choose beta values which minimize the sample MSE. We use the RSE to estimate var(eps). RSE = sqrt(RSS / n-p-1). We use RSE and R^2 to study model fit.
+**Goal**: We choose beta values which minimize the sample MSE. We use the RSE to estimate var(eps). RSE = sqrt(RSS / n-p-1). We use RSE and R^2 to study model fit.
 
-Bias-Variance Trade-off
+Training data: data used for estimating model parameters
+Test data: data used for assesing model prediction accuracy
+
+**Test MSE**
+1. Approximate by validation MSE through C.V on a validation dataset if the dataset is small. Obtain the MSE of each model on the rth fold of data, then obtain the CV MSE through the mean of all the model MSE. Any form of variable selection must be done within each iteration of C.V using the validation dataset.
+2. Split dataset into training and test, and approximate through predict function
+
+**Bias-Variance Trade-off**
 1. Bias = E(f^(x0)) = f(x0), how close a model is to its true relationship
 2. Variance = Var(f^(x0))
 3. Model flexibility (i.e number of predictors in the model) affects the model bias and estimation variance
@@ -10,12 +17,12 @@ Bias-Variance Trade-off
 5. Over-fitting of the model gives low training MSE but high test MSE
 6. Training MSE tends to underestimate the theoretical MSE, tend to choose a more flexible model that overfits the training data (lower training MSE)
 
-Variable Selection (subset selection, shrinkage, dimension reduction)
+**Variable Selection (subset selection, shrinkage, dimension reduction)**
 Motivations: 
 a. Prediction accuracy: full model has low bias, high estimation variance. When p > n, there is no longer a unique least squares coefficient estimate
 b. Interpretability: high-dimensions can contain certain irrelevant predictors, removing them can improve interpretability
 
-Subset selection (best subset selection, forward/backward stepwise selection, forward stagewise regression)
+**Subset selection (best subset selection, forward/backward stepwise selection, forward stagewise regression)**
 1. Best subset selection: Obtain a model with increasing number of predictors. Among p predictors, choose k <= p predictors that provide the best fit. Within each of the models with k predictors, select the best model with k predictors using the smallest RSS or largest R2. When comparing models with different number of predictors, we use c.v prediction error, Cp (AIC), BIC or adjR2.
 2. Forward/backward stepwise selection: sequentially add and remove predictors respectively. The predictor added and removed will correspond to the model with the smallest RSS or largest R2 respectively. The selection stop once the prev model has the smallest c.v prediction error, Cp (AIC), BIC or adjR2.
 3. Forward stagewise regression: consider correlation between each predictor and residuals <img width="151" alt="Screenshot 2022-09-26 at 4 54 27 PM" src="https://user-images.githubusercontent.com/68551564/192235135-632b9fd1-878f-4827-8384-97e3e8a1f192.png">. Choose the predictor to add which has the highest absolute correlation with the residuals. <img width="412" alt="Screenshot 2022-09-26 at 4 56 16 PM" src="https://user-images.githubusercontent.com/68551564/192235527-e25a1a2b-cd46-437e-a35f-9206622618ea.png">. If delta = abs(cjhathat), it is forward stepwise selection. Small delta makes forward stagewise selection less greedy. If a variable is repicked in another step, then no new variable is added.
@@ -24,12 +31,12 @@ Subset selection (best subset selection, forward/backward stepwise selection, fo
 2. All methods above excluding ridge are able to perform variable selection
 3. C.V can be performed for ridge & lasso regression to obtain optimum lambda constraint value that gives the lowest MSE
 
-Dimension Reduction: PCA (Principal component analysis)
+**Dimension Reduction: PCA (Principal component analysis)**
 1. Maximise the variance of (xi - xbar, phi)
 2. Sequential PCA Algorithm (find leading eigenvector) & eigen decomposition
 3. With the predictors, find first and second principal components (eigenvectors v1 & v2)
 
-Dianostics
+**Dianostics**
 
 Outliers are points where the response is unusual given the predictor. In contrast, points with high leverage have an unusual predictor value. High leverage observations tend to have more substantial impact on the estimated regression line. In a model with multiple predictors, points with high leverage fall outside the range of other values.
 1. Non-linearity of response-predictor relationship (Residual vs fitted values plot)
@@ -47,7 +54,7 @@ Outliers are points where the response is unusual given the predictor. In contra
 
 R2 from a regression of Xj onto all of the other predictors. If R2 is close to one, then collinearity is present, and so the VIF will be large.
 
-Steps:
+**Steps:**
 1. Determine the scale of predictor variables to be included in the regression function: pairwise scatter plots.
 2. Using the full model for the preliminary analysis.
 3. Check homogeneity (equal variance of irreducible error): plot of residuals vs. fitted values (check for null pattern).
@@ -56,19 +63,15 @@ Steps:
 6. If there are any discrepancy, adopt remedial measures (for outliers: create dummy variables of size n of 0s except the index of the observation number and add this dummy variable to the model reject if p-value < 0.05).
 7. If preliminary analysis showed discrepancies (e.g. outliers), remove those observations if significant and perform variable selection/penalization using the new dataset. Then perform diagnostics check and remove significant discrepancies from the original dataset. The new dataset will be the final dataset to train the model.
 
-Model Selection & Regularization
+**Model Selection & Regularization**
 1. Criteria: Cp, AIC/BIC, adjR2
 2. Minimum value gives the best model subset of the full fit
 
-Test MSE
-1. Approximate through C.V if the dataset is small
-2. Split dataset into training and test, and approximate through predict function
-
-Model.matrix 
+**Model.matrix**
 1. To be used when the fit involves matrices and not dataframes
 2. Dummy variables needed when calculating vcov matrix
 
-Hypothesis Testing
+**Hypothesis Testing**
 1. Two sided test: If abs(Tbeta1) > tn-2(alpha / 2), reject H0; otherwise, do not reject. 
 2. One sided test: <img width="281" alt="Screenshot 2022-09-26 at 4 18 32 PM" src="https://user-images.githubusercontent.com/68551564/192227658-86e424f7-f726-4bd9-a5f3-e508f7be1672.png">, for (1), if Tbeta1 > tn-2(alpha), reject H0; otherwise, do not reject. For (2), if Tbeta1 < -tn-2(alpha), reject H0, otherwise do not reject.
 3. T statistic e.g Tbeta0 = (beta0hat - beta0) / SE(beta0hat) 

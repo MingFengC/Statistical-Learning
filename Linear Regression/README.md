@@ -10,7 +10,7 @@ Test data: data used for assesing model prediction accuracy
 2. Split dataset into training and test, and approximate through predict function
 
 **Bias-Variance Trade-off**
-1. Bias = E(f^(x0)) = f(x0), how close a model is to its true relationship
+1. Bias = E(f^(x0)) = f(x0), how close a model is to its true relationship. If the true relationship is a subset of the chosen model, model bias = 0.
 2. Variance = Var(f^(x0))
 3. Model flexibility (i.e number of predictors in the model) affects the model bias and estimation variance
 4. Higher model flexibility lowers model bias but introduces higher estimation variance
@@ -31,10 +31,16 @@ b. Interpretability: high-dimensions can contain certain irrelevant predictors, 
 2. All methods above excluding ridge are able to perform variable selection
 3. C.V can be performed for ridge & lasso regression to obtain optimum lambda constraint value that gives the lowest MSE
 
+**Shrinkage methods**
+1. Subset selection: L0 norm (number of non zero loadings in beta) < k. 
+2. Ridge regression: squared L2 norm <= gamma. Larger gamma value results in a more flexible model. ![Screenshot 2022-09-27 at 12 06 51 AM](https://user-images.githubusercontent.com/68551564/192326319-7133bb76-10e8-4836-93f3-37effbe6f605.png). Larger gamma values correspond to smaller lambda values. The shrinkage penalty tends to be small when all betas are close to 0. As lambda approaches infinity, beta values approach 0 to minimize the penalized RSS as much as possible.
+
+
 **Dimension Reduction: PCA (Principal component analysis)**
-1. Maximise the variance of (xi - xbar, phi)
-2. Sequential PCA Algorithm (find leading eigenvector) & eigen decomposition
-3. With the predictors, find first and second principal components (eigenvectors v1 & v2)
+1. High dimension data where p > n, OLS has a much higher estimation variance.
+2. Maximise the variance of (xi - xbar, phi)
+3. Sequential PCA Algorithm (find leading eigenvector) & eigen decomposition
+4. With the predictors, find first and second principal components (eigenvectors v1 & v2)
 
 **Dianostics**
 

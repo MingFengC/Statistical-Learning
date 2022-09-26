@@ -1,13 +1,25 @@
 # Linear Regression
 
-Goal: We choose beta values which minimize the RSS
+Goal: We choose beta values which minimize the sample MSE. We use the RSE to estimate var(eps). RSE = sqrt(RSS / n-p-1). We use RSE and R^2 to study model fit.
 
 Bias-Variance Trade-off
-1. Model flexibility (i.e number of predictors in the model) affects the model bias and estimation variance
-2. Higher model flexibility lowers model bias but introduces higher estimation variance
-3. Over-fitting of the model gives low training MSE but high test MSE
+1. Bias = E(f^(x0)) = f(x0), how close a model is to its true relationship
+2. Variance = Var(f^(x0))
+3. Model flexibility (i.e number of predictors in the model) affects the model bias and estimation variance
+4. Higher model flexibility lowers model bias but introduces higher estimation variance
+5. Over-fitting of the model gives low training MSE but high test MSE
+6. Training MSE tends to underestimate the theoretical MSE, tend to choose a more flexible model that overfits the training data (lower training MSE)
 
-Penalization & Variable Selection
+Variable Selection (subset selection, shrinkage, dimension reduction)
+Motivations: 
+a. Prediction accuracy: full model has low bias, high estimation variance. When p > n, there is no longer a unique least squares coefficient estimate
+b. Interpretability: high-dimensions can contain certain irrelevant predictors, removing them can improve interpretability
+
+Subset selection (best subset selection, forward/backward stepwise selection, forward stagewise regression)
+1. Best subset selection: Obtain a model with increasing number of predictors. Among p predictors, choose k <= p predictors that provide the best fit. Within each of the models with k predictors, select the best model with k predictors using the smallest RSS or largest R2. When comparing models with different number of predictors, we use c.v prediction error, Cp (AIC), BIC or adjR2.
+2. Forward/backward stepwise selection: sequentially add and remove predictors respectively. The predictor added and removed will correspond to the model with the smallest RSS or largest R2 respectively. The selection stop once the prev model has the smallest c.v prediction error, Cp (AIC), BIC or adjR2.
+3. Forward stagewise regression: consider correlation between each predictor and residuals <img width="151" alt="Screenshot 2022-09-26 at 4 54 27 PM" src="https://user-images.githubusercontent.com/68551564/192235135-632b9fd1-878f-4827-8384-97e3e8a1f192.png">. Choose the predictor to add which has the highest absolute correlation with the residuals. <img width="412" alt="Screenshot 2022-09-26 at 4 56 16 PM" src="https://user-images.githubusercontent.com/68551564/192235527-e25a1a2b-cd46-437e-a35f-9206622618ea.png">. If delta = abs(cjhathat), it is forward stepwise selection. Small delta makes forward stagewise selection less greedy. If a variable is repicked in another step, then no new variable is added.
+
 1. Best subset selection, forward/backward/stepwise selection, ridge regression, lasso regression, least-angle regression
 2. All methods above excluding ridge are able to perform variable selection
 3. C.V can be performed for ridge & lasso regression to obtain optimum lambda constraint value that gives the lowest MSE
@@ -55,3 +67,11 @@ Test MSE
 Model.matrix 
 1. To be used when the fit involves matrices and not dataframes
 2. Dummy variables needed when calculating vcov matrix
+
+Hypothesis Testing
+1. Two sided test: If abs(Tbeta1) > tn-2(alpha / 2), reject H0; otherwise, do not reject. 
+2. One sided test: <img width="281" alt="Screenshot 2022-09-26 at 4 18 32 PM" src="https://user-images.githubusercontent.com/68551564/192227658-86e424f7-f726-4bd9-a5f3-e508f7be1672.png">, for (1), if Tbeta1 > tn-2(alpha), reject H0; otherwise, do not reject. For (2), if Tbeta1 < -tn-2(alpha), reject H0, otherwise do not reject.
+3. T statistic e.g Tbeta0 = (beta0hat - beta0) / SE(beta0hat) 
+4. F statistic (1-MSE) / MSE (If F exceeds the upper alpha quantile f1,n-1(alpha), the null hypothesis is rejected at level alpha, otherwise it is not.
+5. P-value: Reject when < alpha
+6. Confidence interval containing 0

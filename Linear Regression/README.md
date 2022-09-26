@@ -34,7 +34,9 @@ b. Interpretability: high-dimensions can contain certain irrelevant predictors, 
 **Shrinkage methods**
 1. Subset selection: L0 norm (number of non zero loadings in beta) < k. 
 2. Ridge regression: squared L2 norm <= gamma. Larger gamma value results in a more flexible model. ![Screenshot 2022-09-27 at 12 06 51 AM](https://user-images.githubusercontent.com/68551564/192326319-7133bb76-10e8-4836-93f3-37effbe6f605.png). Larger gamma values correspond to smaller lambda values. The shrinkage penalty tends to be small when all betas are close to 0. As lambda approaches infinity, beta values approach 0 to minimize the penalized RSS as much as possible. The scale of each predictor has impact on the shrinkage effect ![Screenshot 2022-09-27 at 1 10 20 AM](https://user-images.githubusercontent.com/68551564/192338731-24153bc6-221a-4c47-8657-24ab3b96223b.png). We want the ridge estimate betajR to receive roughly the same amount of shrinkage after standardization, thus standardization has to be done for each xij before ridge regression.
+3. Lasso regression
 
+Estimating hyperparameters: perform C.V with k folds. Within each fold, for each candidate lambda value, we find the ridge estimator and the validation MSE for that particular fold with that particular lambda value. Find the mean across all K folds for each lamba value to obtain the mean test error. ![Screenshot 2022-09-27 at 1 41 22 AM](https://user-images.githubusercontent.com/68551564/192344369-2b0c6575-3c55-438b-8c49-5d284595b58c.png)
 
 **Dimension Reduction: PCA (Principal component analysis)**
 1. High dimension data where p > n, OLS has a much higher estimation variance.

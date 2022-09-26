@@ -9,7 +9,7 @@ Bias-Variance Trade-off
 
 Penalization & Variable Selection
 1. Best subset selection, forward/backward/stepwise selection, ridge regression, lasso regression, least-angle regression
-2. All methods above excluding lasso are able to perform variable selection
+2. All methods above excluding ridge are able to perform variable selection
 3. C.V can be performed for ridge & lasso regression to obtain optimum lambda constraint value that gives the lowest MSE
 
 Dimension Reduction: PCA (Principal component analysis)

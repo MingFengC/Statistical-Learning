@@ -46,6 +46,20 @@ Estimating hyperparameters: perform C.V with k folds. Within each fold, for each
 3. Sequential PCA Algorithm (find leading eigenvector) & eigen decomposition
 4. With the predictors, find first and second principal components (eigenvectors v1 & v2)
 
+**Effective degree of freedom**
+1. Df is used to assess how models with different number of predictors perform for OLS estimates
+2. Df = number of unknown parameters (including intercept). As the number of unknown parameters increases, model flexibility increases, RSS decreases. Thus adding terms related to df adjusts for this.
+3. Df is incapable to assess models from shrinkage methods, for e.g. Ridge shrinks the coefficients of the estimates towards 0 but not entirely 0 when lambda is big, thus df will always still be the total number of parameters which is an unfair criterion for Ridge.
+4. Effective df is used instead which studies the covariance between the estimated response value and the observed response value scaled by the variance of the irreducible error ![Screenshot 2022-09-27 at 5 59 18 PM](https://user-images.githubusercontent.com/68551564/192496534-2c5c9139-39c5-4ef1-9087-a3de8967c361.png).
+
+**Bootstrap**
+1. In statistics, it is common to investigate how sensitive an estimated quantity is with respect to change of data (estimation variance) or the confidence interval of an estimated quantity
+2. These values can be estimated using population distribution (impossible to obtain)
+3. Substitute using bootstrap instead which takes the observed samples as an empirical population to draw samples from
+4. Bootstrap sample would have the same number of samples as the original sample
+5. Each bootstrap sample is conditionally independent
+6. Boostrap is repeated independently, boostrap estimates are idependently and identically distributed.
+
 **Dianostics**
 
 Outliers are points where the response is unusual given the predictor. In contrast, points with high leverage have an unusual predictor value. High leverage observations tend to have more substantial impact on the estimated regression line. In a model with multiple predictors, points with high leverage fall outside the range of other values.
